@@ -1,4 +1,10 @@
+# frozen_string_literal: true
+
+require 'httparty'
+
 class ForecastController < ApplicationController
+  OPENWEATHERMAP_API_KEY = 'fbe6c738c1118e617d9495aa2b858bd3'
+
   def show
     address = params[:address]
     forecast_data = fetch_forecast(address)
@@ -18,13 +24,23 @@ class ForecastController < ApplicationController
   end
 
   def fetch_weather_data(address)
-    {
-      address: address,
-      temperature: rand(32..90), # Generate a random temperature for demonstration
-      high: rand(60..90),
-      low: rand(32..60),
-      extended_forecast: ['Sunny', 'Partly Cloudy', 'Rainy', 'Rain Storms', 'Hurricane Winds'].sample,
-      cached: true # Indicate that the data was pulled from cache
-    }
+    # http://api.openweathermap.org/geo/1.0/direct?limit=1&q=Davie,FL,US&appid=fbe6c738c1118e617d9495aa2b858bd3
+    response = HTTParty.get("http://api.openweathermap.org/geo/1.0/direct?limit=1&q=#{address}&appid=fbe6c738c1118e617d9495aa2b858bd3")
+    response = JSON.parse(response.body)
+    # http://api.openweathermap.org/data/2.5/weather?lat=26.0628665&lon=-80.2331038&appid=fbe6c738c1118e617d9495aa2b858bd3&units=imperial
+    response = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?lat=#{response[0]['lat']}&lon=#{response[0]['lon']}&appid=#{OPENWEATHERMAP_API_KEY}&units=imperial")
+
+    if response.code == 200
+      weather = JSON.parse(response.body)
+      {
+        address:,
+        temperature: weather['main']['temp'],
+        high: weather['main']['temp_max'],
+        low: weather['main']['temp_min'],
+        cached: false
+      }
+    else
+      { error: 'Unable to fetch weather data' }
+    end
   end
 end
