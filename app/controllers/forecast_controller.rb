@@ -8,17 +8,29 @@ class ForecastController < ApplicationController
   def show
     address = params[:address]
     forecast_data = fetch_forecast(address)
-    render json: forecast_data
+
+    if forecast_data[:error]
+      render json: forecast_data, status: :unprocessable_entity
+    else
+      render json: forecast_data
+    end
   end
 
   private
 
   def fetch_forecast(address)
     weather_data = fetch_weather_data(address)
-    cache_forecast(address, weather_data)
+
+    if weather_data[:error]
+      weather_data
+    else
+      cache_forecast(address, weather_data)
+    end
   end
 
   def fetch_weather_data(address)
+    return { error: 'Address is required' } unless address.present?
+
     location = fetch_location(address)
     return { error: 'Unable to fetch location data' } unless location
 
@@ -26,7 +38,7 @@ class ForecastController < ApplicationController
     return { error: 'Unable to fetch weather data' } unless weather
 
     {
-      address: address,
+      address:,
       temperature: weather['main']['temp'],
       high: weather['main']['temp_max'],
       low: weather['main']['temp_min'],
@@ -46,7 +58,7 @@ class ForecastController < ApplicationController
     JSON.parse(response.body)
   end
 
-  def cache_forecast(address, weather_data)
+    def cache_forecast(address, weather_data)
     Rails.cache.fetch("forecast_#{address}", expires_in: 30.minutes) do
       weather_data.merge(cached: true)
     end
