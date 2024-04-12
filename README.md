@@ -108,3 +108,24 @@ This application was created by Alvaro Escobar
 
 This project is licensed under the MIT License.
 
+## Scalability Considerations
+
+### Caching: 
+- Implementing caching mechanisms, as done in the provided code, can greatly improve performance by reducing the number of requests made to external APIs. However, it is essential to design the caching strategy carefully to balance the freshness of the data with the load on the caching system.
+
+### Load Balancing: 
+
+- As traffic to the Forecast endpoint increases, distributing the load across multiple servers can improve response times and handle higher concurrent request volumes. Load balancing techniques like round-robin, least connections, or IP hash can be employed to evenly distribute incoming requests.
+
+### Horizontal Scaling: 
+
+- Scaling horizontally by adding more servers or instances of the application can help handle increased traffic. Containerization technologies like Docker and orchestration platforms like Kubernetes can facilitate the deployment and management of multiple instances of the application.
+
+### Asynchronous Processing: 
+
+- We can consider offloading long-running or resource-intensive tasks to background jobs or worker processes. For example, fetching weather data from external APIs can sometimes be slow, so using asynchronous processing can prevent blocking the main application thread and improve responsiveness.
+
+### Rate Limiting and Throttling: 
+
+- We can implement rate limiting and request throttling to prevent abuse, protect against denial-of-service attacks, and ensure fair usage of resources. This can help maintain the availability and stability of the service during periods of high traffic.
+
