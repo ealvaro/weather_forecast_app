@@ -35,7 +35,13 @@ This is a simple weather forecast application that provides weather data for a g
 
 	Rename the .env.example file to .env and provide your OpenWeatherMap API key ( or use mine but do not abuse it )
 
-5. Run the application:
+5. Create temporary file called caching-dev.txt for caching purposes
+
+   ```bash
+
+	touch tmp/caching-dev.txt
+
+6. Run the application:
 
    ```bash
 

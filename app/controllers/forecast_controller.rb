@@ -1,10 +1,6 @@
-# frozen_string_literal: true
-
 require 'httparty'
 
 class ForecastController < ApplicationController
-  OPENWEATHERMAP_API_KEY = 'fbe6c738c1118e617d9495aa2b858bd3'
-
   def show
     address = params[:address]
     forecast_data = fetch_forecast(address)
@@ -52,7 +48,7 @@ class ForecastController < ApplicationController
 
   def fetch_location(address)
     begin
-      response = HTTParty.get("http://api.openweathermap.org/geo/1.0/direct?limit=1&q=#{address}&appid=#{OPENWEATHERMAP_API_KEY}")
+      response = HTTParty.get("#{ENV['OPENWEATHERMAP_GEO_API_URL']}?limit=1&q=#{address}&appid=#{ENV['OPENWEATHERMAP_API_KEY']}")
     rescue HTTParty::Error
       return nil
     end
@@ -61,7 +57,7 @@ class ForecastController < ApplicationController
 
   def fetch_weather(latitude, longitude)
     begin
-      response = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?lat=#{latitude}&lon=#{longitude}&appid=#{OPENWEATHERMAP_API_KEY}&units=imperial")
+      response = HTTParty.get("#{ENV['OPENWEATHERMAP_WEATHER_API_URL']}?lat=#{latitude}&lon=#{longitude}&appid=#{ENV['OPENWEATHERMAP_API_KEY']}&units=imperial")
     rescue HTTParty::Error
       return nil
     end
