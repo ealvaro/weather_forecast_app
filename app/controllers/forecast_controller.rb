@@ -19,6 +19,9 @@ class ForecastController < ApplicationController
   private
 
   def fetch_forecast(address)
+    cached_forecast = Rails.cache.read("forecast_#{address}")
+    return cached_forecast if cached_forecast.present?
+
     weather_data = fetch_weather_data(address)
 
     if weather_data[:error]
@@ -26,6 +29,7 @@ class ForecastController < ApplicationController
     else
       cache_forecast(address, weather_data)
     end
+    weather_data
   end
 
   def fetch_weather_data(address)

@@ -19,7 +19,7 @@ RSpec.describe ForecastController, type: :controller do
         expect(body['temperature']).to eq(10)
         expect(body['high']).to eq(15)
         expect(body['low']).to eq(5)
-        expect(body['cached']).to eq(true)
+        expect(body['cached']).to eq(false)
       end
     end
 
