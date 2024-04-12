@@ -51,18 +51,24 @@ class ForecastController < ApplicationController
   end
 
   def fetch_location(address)
-    response = HTTParty.get("http://api.openweathermap.org/geo/1.0/direct?limit=1&q=#{address}&appid=#{OPENWEATHERMAP_API_KEY}")
+    begin
+      response = HTTParty.get("http://api.openweathermap.org/geo/1.0/direct?limit=1&q=#{address}&appid=#{OPENWEATHERMAP_API_KEY}")
+    rescue HTTParty::Error
+      return nil
+    end
     JSON.parse(response.body).first
   end
 
   def fetch_weather(latitude, longitude)
-    response = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?lat=#{latitude}&lon=#{longitude}&appid=#{OPENWEATHERMAP_API_KEY}&units=imperial")
-    return nil unless response.code == 200
-
+    begin
+      response = HTTParty.get("http://api.openweathermap.org/data/2.5/weather?lat=#{latitude}&lon=#{longitude}&appid=#{OPENWEATHERMAP_API_KEY}&units=imperial")
+    rescue HTTParty::Error
+      return nil
+    end
     JSON.parse(response.body)
   end
 
-    def cache_forecast(address, weather_data)
+  def cache_forecast(address, weather_data)
     Rails.cache.fetch("forecast_#{address}", expires_in: 30.minutes) do
       weather_data.merge(cached: true)
     end
