@@ -1,0 +1,24 @@
+---
+openapi: 3.0.1
+info:
+  title: API V1
+  version: v1
+paths:
+  "/forecast":
+    get:
+      summary: show forecast
+      parameters:
+      - name: address
+        in: query
+        schema:
+          type: string
+      responses:
+        '200':
+          description: successful
+        '422':
+          description: unsuccessful
+servers:
+- url: http://{defaultHost}
+  variables:
+    defaultHost:
+      default: localhost:3000

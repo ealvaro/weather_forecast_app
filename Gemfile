@@ -16,18 +16,20 @@ gem "jbuilder"
 
 gem 'httparty'
 
-# Windows does not include zoneinfo files, so bundle the tzinfo-data gem
-gem "tzinfo-data", platforms: %i[ windows jruby ]
-
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", require: false
 
 # Used to load Environment Variables
 gem "dotenv-rails"
 
+# Add Swagger Documentation
+gem 'rswag'
+
+# Use Rack CORS for handling Cross-Origin Resource Sharing (CORS), making cross-origin AJAX possible
+gem 'rack-cors'
+
 group :development, :test do
   # See https://guides.rubyonrails.org/debugging_rails_applications.html#debugging-with-the-debug-gem
-  gem "debug", platforms: %i[ mri windows ]
   gem "byebug"
   gem 'rspec-rails'
 end

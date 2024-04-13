@@ -1,18 +1,35 @@
-require 'rails_helper'
+require 'swagger_helper'
 
 RSpec.describe ForecastController, type: :request do
-  describe 'GET #show' do
-    context 'when address is provided' do
-      it 'returns forecast data' do
-        get '/forecast', params: { address: 'New York,NY,US' }
-        expect(response).to have_http_status(:success)
-      end
-    end
 
-    context 'when address is not provided' do
-      it 'returns an error' do
-        get '/forecast'
-        expect(response).to have_http_status(:unprocessable_entity)
+  path '/forecast' do
+
+    get('show forecast') do
+      
+      parameter name: :address, in: :query, type: :string
+
+      response(200, 'successful') do
+        let(:address) { 'New York,NY,US' }
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
+      end
+
+      response(422, 'unsuccessful') do
+        let(:address) { }
+        after do |example|
+          example.metadata[:response][:content] = {
+            'application/json' => {
+              example: JSON.parse(response.body, symbolize_names: true)
+            }
+          }
+        end
+        run_test!
       end
     end
   end
