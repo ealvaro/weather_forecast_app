@@ -16,19 +16,16 @@ This is a simple weather forecast application that provides weather data for a g
 1. Clone the repository to your local machine:
 
    ```bash
-
-   git clone <repository_url>
+   git clone https://github.com/ealvaro/weather_forecast_app.git
 
 2. Navigate to the project directory:
 
    ```bash
-
 	cd weather-forecast-app
 
 3. Install dependencies:
 
    ```bash
-
 	bundle install
 
 4. Set up the environment variables:
@@ -38,16 +35,14 @@ This is a simple weather forecast application that provides weather data for a g
 5. Create temporary file called caching-dev.txt for caching purposes
 
    ```bash
-
 	touch tmp/caching-dev.txt
 
 6. Run the application:
 
    ```bash
-
 	rails server
 
-	The application will start running at http://localhost:3000.
+The application will start running at http://localhost:3000
 
 ## Usage
 
@@ -58,12 +53,14 @@ This is a simple weather forecast application that provides weather data for a g
 - URL: /forecast
 - Method: GET
 - Parameters:
--- address (required): The address for which weather forecast is requested in String format "New York, NY, US"
+
+  address (required): 
+  The address for which weather forecast is requested in String format "New York, NY, US" or "Auckland,NZ"
+
 - Response:
 
 If successful:
 
-	```JSON
 	{
 	  "address": "New York, NY, US",
 	  "temperature": 15,
@@ -72,24 +69,31 @@ If successful:
 	  "cached": false
 	}
 
+
 If error:
 
-	```JSON
+
 	{
 	  "error": "Address is required"
 	}
 
+
 ### Sample Requests
+
 
 Fetch Weather Forecast for a Specific Address
 
    ```bash
-   curl -X GET "http://localhost:3000/forecast?address=New%20York,NY,US"
+   curl -i -X GET "http://localhost:3000/forecast?address=New%20York,NY,US" -H "Content-Type: application/json" -H "Accept: application/json"
+   ```
+
 
 Fetch Weather Forecast without Providing Address
 
    ```bash
    curl -X GET "http://localhost:3000/forecast"
+   ```
+
 
 ## Testing
 
@@ -99,6 +103,12 @@ To run the tests, execute the following command:
 
    ```bash
    bundle exec rspec
+   ```
+
+To try the endpoint from the Swagger UI go on your browser to:
+
+   http://localhost:3000/api-docs
+
 
 ## Credits
 
@@ -111,6 +121,7 @@ This project is licensed under the MIT License.
 ## Scalability Considerations
 
 ### Caching: 
+
 - Implementing caching mechanisms, as done in the provided code, can greatly improve performance by reducing the number of requests made to external APIs. However, it is essential to design the caching strategy carefully to balance the freshness of the data with the load on the caching system.
 
 ### Load Balancing: 
